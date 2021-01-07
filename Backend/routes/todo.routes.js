@@ -8,7 +8,7 @@ module.exports = (app) => {
   app.post('/todos', todos.create);
 
   // Retrieve all todos
-  app.get('/todos', todos.findAll);
+  app.get('/todos', todos.findAllExercises);
 
   // Retrieve a single todo by id
   app.get('/todos/:id', todos.findOne);

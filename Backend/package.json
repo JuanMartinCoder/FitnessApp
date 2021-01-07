@@ -1,7 +1,7 @@
 {
-  "name": "01101010",
+  "name": "FitnessApp",
   "version": "1.0.0",
-  "description": "CRUD APP ",
+  "description": "APP ",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
@@ -12,6 +12,7 @@
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "helmet": "^4.1.0",
+    "ini": "^2.0.0",
     "mysql": "^2.18.1"
   }
 }

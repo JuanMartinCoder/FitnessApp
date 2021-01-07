@@ -1,11 +1,16 @@
+const fs = require('fs');
+const ini = require('ini');
 const mysql = require('mysql');
 
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'Root_123',
-  database: 'todolist'
-});
+
+const config = ini.parse(fs.readFileSync('config.ini', 'utf-8'));
+
+const databaseConfig = JSON.parse(JSON.stringify(config.database));
+
+console.log(databaseConfig);
+
+
+const connection = mysql.createConnection(databaseConfig);
 
 
 connection.connect(function (err) {
@@ -15,6 +20,50 @@ connection.connect(function (err) {
     console.log("You are connected succesfully");
   }
 })
+
+// Retrieve and return all GET ALL from the database.
+exports.findAllExercises = (req, res) => {
+  connection.query('select * from exercises',
+      function (error, results, fields) {
+          if (error) throw error;
+          res.end(JSON.stringify(results));
+      });
+};
+exports.findAllSessions = (req, res) => {
+  connection.query('select * from sessions',
+      function (error, results, fields) {
+          if (error) throw error;
+          res.end(JSON.stringify(results));
+      });
+};
+
+exports.findAllSets = (req, res) => {
+  connection.query('select * from sets',
+      function (error, results, fields) {
+          if (error) throw error;
+          res.end(JSON.stringify(results));
+      });
+};
+
+exports.findAllTypeSessions = (req, res) => {
+  connection.query('select * from type_session',
+      function (error, results, fields) {
+          if (error) throw error;
+          res.end(JSON.stringify(results));
+      });
+};
+
+
+
+
+
+
+
+
+
+
+
+
 
 exports.create = (req, res) => {
   // Validate request
@@ -37,14 +86,6 @@ exports.create = (req, res) => {
       });
 };
 
-// Retrieve and return all todos from the database.
-exports.findAll = (req, res) => {
-  connection.query('select * from todos',
-      function (error, results, fields) {
-          if (error) throw error;
-          res.end(JSON.stringify(results));
-      });
-};
 
 // Find a single todo with a id
 exports.findOne = (req, res) => {
