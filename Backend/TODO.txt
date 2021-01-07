@@ -1,0 +1,10 @@
+TODO
+
+---API REST---
+
+-Choose between Python or JS (Node.js) for the server
+-Make the database schema 
+-Create all the tables needed with PostgreSQL or MySQL 
+-Connect the server and the databse to create an API REST
+
+
