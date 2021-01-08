@@ -14,7 +14,7 @@ connection.connect(function (err) {
   if(err){
     throw err;
   }else{
-    console.log("You are connected succesfully");
+    console.log("You are connected succesfully to the MYSQL DB");
   }
 })
 
@@ -214,16 +214,63 @@ exports.deleteSession = (req, res) => {
 
 
 // Update a todo identified by the id in the request
-exports.update = (req, res) => {
+exports.updateExercise = (req, res) => {
     // Validate Request
-    if (!req.body.description) {
+    if (!req.body.name) {
         return res.status(400).send({
-            message: "Todo description can not be empty"
+            message: "Name can not be empty"
         });
     }
   
-    connection.query('UPDATE `todos` SET `name`=?,`description`=?, `done`=? where `id`=?',
-        [req.body.name, req.body.description, req.body.done, req.params.id],
+    connection.query('UPDATE `exercises` SET `name`=? where `id_exercise`=?',
+        [req.body.name, req.params.id],
+        function (error, results, fields) {
+            if (error) throw error;
+            res.end(JSON.stringify(results));
+        });
+  };
+
+  exports.updateTypeSession = (req, res) => {
+    // Validate Request
+    if (!req.body.name) {
+        return res.status(400).send({
+            message: "Name can not be empty"
+        });
+    }
+  
+    connection.query('UPDATE `type_session` SET `name`=?,`description`=? where `id_session`=?',
+        [req.body.name, req.body.description ,req.params.id],
+        function (error, results, fields) {
+            if (error) throw error;
+            res.end(JSON.stringify(results));
+        });
+  };
+
+  exports.updateSession = (req, res) => {
+    // Validate Request
+    if (!req.body.mesociclo) {
+        return res.status(400).send({
+            message: "Mesociclo can not be empty"
+        });
+    }
+  
+    connection.query('UPDATE `sessions` SET `id_type_session`=?,`id_excercise`=?,`date`=?,`id_set`=? ,`mesociclo`=?,where `id_session`=?',
+        [req.body.idTS, req.body.idE, req.body.idS, req.body.date ,req.body.mesociclo  ,req.params.id],
+        function (error, results, fields) {
+            if (error) throw error;
+            res.end(JSON.stringify(results));
+        });
+  };
+  exports.updateSet = (req, res) => {
+    // Validate Request
+    if (!req.body.serie) {
+        return res.status(400).send({
+            message: "Set can not be empty"
+        });
+    }
+  
+    connection.query('UPDATE `sets` SET `serie`=?,`reps`=?,`rir`=?,`rpe`=?,`weight`=? where `id_set`=?',
+        [req.body.serie, req.body.reps,req.body.rir,req.body.rpe, req.body.weight,req.params.id],
         function (error, results, fields) {
             if (error) throw error;
             res.end(JSON.stringify(results));

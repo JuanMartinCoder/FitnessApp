@@ -30,7 +30,10 @@ module.exports = (app) => {
   app.delete('/typesession/:id', fitnessApp.deleteTypeSession);  
 
   // Update a Todo with id
-  app.put('fitnessApp/:id', fitnessApp.update);
+  app.put('/exercise/:id', fitnessApp.updateExercise);
+  app.put('/session/:id', fitnessApp.updateSession);
+  app.put('/set/:id', fitnessApp.updateSet);
+  app.put('/typesession/:id', fitnessApp.updateTypeSession);
 
 
 }
