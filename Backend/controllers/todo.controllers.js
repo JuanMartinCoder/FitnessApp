@@ -7,9 +7,6 @@ const config = ini.parse(fs.readFileSync('config.ini', 'utf-8'));
 
 const databaseConfig = JSON.parse(JSON.stringify(config.database));
 
-console.log(databaseConfig);
-
-
 const connection = mysql.createConnection(databaseConfig);
 
 
@@ -53,74 +50,182 @@ exports.findAllTypeSessions = (req, res) => {
       });
 };
 
+// Find a single record with a id
+exports.findOneSession = (req, res) => {
+    connection.query('select * from sessions where id_session=?',
+        [req.params.id],
+        function (error, results, fields) {
+            if (error) throw error;
+            res.end(JSON.stringify(results));
+        });
+  };
+
+  exports.findOneExercise = (req, res) => {
+    connection.query('select * from exercise where id_exercise=?',
+        [req.params.id],
+        function (error, results, fields) {
+            if (error) throw error;
+            res.end(JSON.stringify(results));
+        });
+  };
+
+  exports.findOneTypeSession = (req, res) => {
+    connection.query('select * from type_session where id_session=?',
+        [req.params.id],
+        function (error, results, fields) {
+            if (error) throw error;
+            res.end(JSON.stringify(results));
+        });
+  };
+
+  exports.findOneSet = (req, res) => {
+    connection.query('select * from sets where id_set=?',
+        [req.params.id],
+        function (error, results, fields) {
+            if (error) throw error;
+            res.end(JSON.stringify(results));
+        });
+  };
 
 
-
-
-
-
-
-
-
-
-
-
-exports.create = (req, res) => {
+// Create a record into de database
+exports.createExercise = (req, res) => {
   // Validate request
-  if (!req.body.description) {
+    if (!req.body.name) {
       return res.status(400).send({
-          message: "Todo description can not be empty"
+          message: "Name can not be empty"
       });
   }
-
-  var params = req.body;
-  console.log(params);
-
-  connection.query("INSERT INTO todos SET ? ", params,
+    var params = req.body;
+ 
+    connection.query("INSERT INTO exercises SET ? ", params,
       function (error, results, fields) {
-          if (error) throw error;
+        if (error) throw error;
           return res.send({
               data: results,
-              message: 'New todo has been created successfully.'
+              message: 'New exercise has been created successfully.'
           });
-      });
+    });
 };
 
+exports.createTypeSession = (req, res) => {
+    // Validate request
+    if (!req.body.description) {
+        return res.status(400).send({
+            message: "Description can not be empty"
+        });
+    }
+  
+    var params = req.body;
+    
+  
+    connection.query("INSERT INTO type_session SET ? ", params,
+        function (error, results, fields) {
+            if (error) throw error;
+            return res.send({
+                data: results,
+                message: 'New Type of session has been created successfully.'
+            });
+        });
+  };
 
-// Find a single todo with a id
-exports.findOne = (req, res) => {
+  exports.createSession = (req, res) => {
+    // Validate request
+    if (!req.body.mesociclo) {
+        return res.status(400).send({
+            message: "Mesociclo can not be empty"
+        });
+    }
+  
+    var params = req.body;
+    
+  
+    connection.query("INSERT INTO sessions SET ? ", params,
+        function (error, results, fields) {
+            if (error) throw error;
+            return res.send({
+                data: results,
+                message: 'New session has been created successfully.'
+            });
+        });
+  };
 
-  connection.query('select * from todos where Id=?',
-      [req.params.id],
-      function (error, results, fields) {
-          if (error) throw error;
-          res.end(JSON.stringify(results));
-      });
-};
+  exports.createSet = (req, res) => {
+    // Validate request
+    if (!req.body.serie) {
+        return res.status(400).send({
+            message: "Serie can not be empty"
+        });
+    }
+    if (!req.body.reps) {
+        return res.status(400).send({
+            message: "Reps can not be empty"
+        });
+    }
+  
+    var params = req.body;
+  
+    connection.query("INSERT INTO sets SET ? ", params,
+        function (error, results, fields) {
+            if (error) throw error;
+            return res.send({
+                data: results,
+                message: 'New set has been created successfully.'
+            });
+        });
+  };
 
-// Update a todo identified by the id in the request
-exports.update = (req, res) => {
-  // Validate Request
-  if (!req.body.description) {
-      return res.status(400).send({
-          message: "Todo description can not be empty"
-      });
-  }
 
-  connection.query('UPDATE `todos` SET `name`=?,`description`=?, `done`=? where `id`=?',
-      [req.body.name, req.body.description, req.body.done, req.params.id],
-      function (error, results, fields) {
-          if (error) throw error;
-          res.end(JSON.stringify(results));
-      });
-};
+
 
 // Delete a todo with the specified id in the request
-exports.delete = (req, res) => {
-  console.log(req.params);
-  connection.query('DELETE FROM `todos` WHERE `Id`=?', 
+exports.deleteExercise = (req, res) => {
+  
+  connection.query('DELETE FROM `exercise` WHERE `id_exercise`=?', 
       [req.params.id], function (error, results, fields) {
           if (error) throw error;
           res.end('Record has been deleted!');
   });
 };
+
+exports.deleteSession = (req, res) => {
+    connection.query('DELETE FROM `sessions` WHERE `id_session`=?', 
+        [req.params.id], function (error, results, fields) {
+            if (error) throw error;
+            res.end('Record has been deleted!');
+    });
+  };
+  exports.deleteSet = (req, res) => {
+    connection.query('DELETE FROM `sets` WHERE `id_set`=?', 
+        [req.params.id], function (error, results, fields) {
+            if (error) throw error;
+            res.end('Record has been deleted!');
+    });
+  };
+
+  exports.deleteTypeSession = (req, res) => {
+    connection.query('DELETE FROM `type_session` WHERE `id_session`=?', 
+        [req.params.id], function (error, results, fields) {
+            if (error) throw error;
+            res.end('Record has been deleted!');
+    });
+  };
+
+
+
+// Update a todo identified by the id in the request
+exports.update = (req, res) => {
+    // Validate Request
+    if (!req.body.description) {
+        return res.status(400).send({
+            message: "Todo description can not be empty"
+        });
+    }
+  
+    connection.query('UPDATE `todos` SET `name`=?,`description`=?, `done`=? where `id`=?',
+        [req.body.name, req.body.description, req.body.done, req.params.id],
+        function (error, results, fields) {
+            if (error) throw error;
+            res.end(JSON.stringify(results));
+        });
+  };
