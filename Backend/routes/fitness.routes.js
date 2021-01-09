@@ -2,7 +2,7 @@
 
 module.exports = (app) => {
   
-  const fitnessApp = require('../controllers/todo.controllers.js');
+  const fitnessApp = require('../controllers/fitness.controllers.js');
 
   // Create a new todo
   app.post('/exercise', fitnessApp.createExercise);

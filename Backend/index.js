@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
 
 
 
-require('./routes/todo.routes.js')(app);
+require('./routes/fitness.routes.js')(app);
 
 
 const PORT = process.env.PORT || 4000;
