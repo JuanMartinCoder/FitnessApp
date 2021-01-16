@@ -91,7 +91,7 @@ exports.findOneSession = (req, res) => {
 // Create a record into de database
 exports.createExercise = (req, res) => {
   // Validate request
-    if (!req.body.name) {
+    if (!req.body.exercise) {
       return res.status(400).send({
           message: "Name can not be empty"
       });
