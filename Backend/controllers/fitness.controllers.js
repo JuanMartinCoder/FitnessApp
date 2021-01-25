@@ -35,7 +35,7 @@ exports.findAllSessions = (req, res) => {
 };
 
 exports.findAllSets = (req, res) => {
-  connection.query('select * from sets',
+  connection.query('select * from series',
       function (error, results, fields) {
           if (error) throw error;
           res.end(JSON.stringify(results));
@@ -43,7 +43,7 @@ exports.findAllSets = (req, res) => {
 };
 
 exports.findAllTypeSessions = (req, res) => {
-  connection.query('select * from type_session',
+  connection.query('select * from type_workout',
       function (error, results, fields) {
           if (error) throw error;
           res.end(JSON.stringify(results));
@@ -61,7 +61,7 @@ exports.findOneSession = (req, res) => {
   };
 
   exports.findOneExercise = (req, res) => {
-    connection.query('select * from exercise where id_exercise=?',
+    connection.query('select * from exercise where id_exercises=?',
         [req.params.id],
         function (error, results, fields) {
             if (error) throw error;
@@ -70,7 +70,7 @@ exports.findOneSession = (req, res) => {
   };
 
   exports.findOneTypeSession = (req, res) => {
-    connection.query('select * from type_session where id_session=?',
+    connection.query('select * from type_workout where id_type_workout=?',
         [req.params.id],
         function (error, results, fields) {
             if (error) throw error;
@@ -79,7 +79,7 @@ exports.findOneSession = (req, res) => {
   };
 
   exports.findOneSet = (req, res) => {
-    connection.query('select * from sets where id_set=?',
+    connection.query('select * from series where id_serie=?',
         [req.params.id],
         function (error, results, fields) {
             if (error) throw error;
@@ -119,12 +119,12 @@ exports.createTypeSession = (req, res) => {
     var params = req.body;
     
   
-    connection.query("INSERT INTO type_session SET ? ", params,
+    connection.query("INSERT INTO type_workout SET ? ", params,
         function (error, results, fields) {
             if (error) throw error;
             return res.send({
                 data: results,
-                message: 'New Type of session has been created successfully.'
+                message: 'New Type of workout has been created successfully.'
             });
         });
   };
@@ -165,7 +165,7 @@ exports.createTypeSession = (req, res) => {
   
     var params = req.body;
   
-    connection.query("INSERT INTO sets SET ? ", params,
+    connection.query("INSERT INTO series SET ? ", params,
         function (error, results, fields) {
             if (error) throw error;
             return res.send({
@@ -181,7 +181,7 @@ exports.createTypeSession = (req, res) => {
 // Delete a todo with the specified id in the request
 exports.deleteExercise = (req, res) => {
   
-  connection.query('DELETE FROM `exercise` WHERE `id_exercise`=?', 
+  connection.query('DELETE FROM `exercises` WHERE `id_exercises`=?', 
       [req.params.id], function (error, results, fields) {
           if (error) throw error;
           res.end('Record has been deleted!');
@@ -196,7 +196,7 @@ exports.deleteSession = (req, res) => {
     });
   };
   exports.deleteSet = (req, res) => {
-    connection.query('DELETE FROM `sets` WHERE `id_set`=?', 
+    connection.query('DELETE FROM `series` WHERE `id_serie`=?', 
         [req.params.id], function (error, results, fields) {
             if (error) throw error;
             res.end('Record has been deleted!');
@@ -204,7 +204,7 @@ exports.deleteSession = (req, res) => {
   };
 
   exports.deleteTypeSession = (req, res) => {
-    connection.query('DELETE FROM `type_session` WHERE `id_session`=?', 
+    connection.query('DELETE FROM `type_workout` WHERE `id_type_workout`=?', 
         [req.params.id], function (error, results, fields) {
             if (error) throw error;
             res.end('Record has been deleted!');
@@ -222,8 +222,8 @@ exports.updateExercise = (req, res) => {
         });
     }
   
-    connection.query('UPDATE `exercises` SET `name`=? where `id_exercise`=?',
-        [req.body.name, req.params.id],
+    connection.query('UPDATE `exercises` SET `exercise_name`=?,`exercise_description`=? where `id_exercises`=?',
+        [req.body.name, req.body.description, req.params.id],
         function (error, results, fields) {
             if (error) throw error;
             res.end(JSON.stringify(results));
@@ -238,7 +238,7 @@ exports.updateExercise = (req, res) => {
         });
     }
   
-    connection.query('UPDATE `type_session` SET `name`=?,`description`=? where `id_session`=?',
+    connection.query('UPDATE `type_workout` SET `name`=?,`description`=? where `id_type_session`=?',
         [req.body.name, req.body.description ,req.params.id],
         function (error, results, fields) {
             if (error) throw error;
@@ -254,8 +254,8 @@ exports.updateExercise = (req, res) => {
         });
     }
   
-    connection.query('UPDATE `sessions` SET `id_type_session`=?,`id_excercise`=?,`date`=?,`id_set`=? ,`mesociclo`=?,where `id_session`=?',
-        [req.body.idTS, req.body.idE, req.body.idS, req.body.date ,req.body.mesociclo  ,req.params.id],
+    connection.query('UPDATE `sessions` SET `nro_session`=?,`type_workout`=?,`id_serie`=?,`mesociclo`=? ,`date_session`=?,where `id_session`=?',
+        [req.body.nroSession, req.body.typeWOUT, req.body.iserie, req.body.mesociclo ,req.body.date  ,req.params.id],
         function (error, results, fields) {
             if (error) throw error;
             res.end(JSON.stringify(results));
@@ -269,8 +269,8 @@ exports.updateExercise = (req, res) => {
         });
     }
   
-    connection.query('UPDATE `sets` SET `serie`=?,`reps`=?,`rir`=?,`rpe`=?,`weight`=? where `id_set`=?',
-        [req.body.serie, req.body.reps,req.body.rir,req.body.rpe, req.body.weight,req.params.id],
+    connection.query('UPDATE `sets` SET `id_exercise`=?,`reps`=?,`weight`=?,`rpe`=? where `id_set`=?',
+        [req.body.exercise, req.body.reps, req.body.weight,req.body.rpe,req.params.id],
         function (error, results, fields) {
             if (error) throw error;
             res.end(JSON.stringify(results));
