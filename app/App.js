@@ -20,34 +20,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-
-
+import HomeScreen from './components/screens/home/HomeScreen';
+import StatsScreen from './components/screens/stats/StatsScreen';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const Tab = createBottomTabNavigator();
-
-function HomeScreen() {
-    
-  return (
-      <View>
-          <Text> Home </Text>
-      </View>
-  )
-
-}
-
-function StatScreen() {
-    
-  return (
-      <View>
-          <Text> StatScreen </Text>
-      </View>
-  )
-
-}
-
 
 const App = () => {
   return (
@@ -80,7 +59,7 @@ const App = () => {
         
         >
           <Tab.Screen name="Home" component={HomeScreen} />
-          <Tab.Screen name="Stats" component={StatScreen} />
+          <Tab.Screen name="Stats" component={StatsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );

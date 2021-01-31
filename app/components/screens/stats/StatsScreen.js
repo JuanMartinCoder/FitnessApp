@@ -1,12 +1,13 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Text, View } from 'react-native'
 
-export default class StatsScreen extends Component {
-    render() {
-        return (
-            <View>
-                <Text> StatsScreen </Text>
-            </View>
-        )
-    }
+
+export default function StatsScreen() {
+    
+    return (
+        <View>
+            <Text> Stats Component </Text>
+        </View>
+    )
+
 }
