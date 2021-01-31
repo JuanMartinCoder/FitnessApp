@@ -1,3 +1,12 @@
+
+/*
+
+
+
+
+*/
+
+
 const fs = require('fs');
 const ini = require('ini');
 const mysql = require('mysql');
@@ -26,13 +35,6 @@ exports.findAllExercises = (req, res) => {
           res.end(JSON.stringify(results));
       });
 };
-exports.findAllSessions = (req, res) => {
-  connection.query('select * from sessions',
-      function (error, results, fields) {
-          if (error) throw error;
-          res.end(JSON.stringify(results));
-      });
-};
 
 exports.findAllSets = (req, res) => {
   connection.query('select * from series',
@@ -51,15 +53,6 @@ exports.findAllTypeSessions = (req, res) => {
 };
 
 // Find a single record with a id
-exports.findOneSession = (req, res) => {
-    connection.query('select * from sessions where id_session=?',
-        [req.params.id],
-        function (error, results, fields) {
-            if (error) throw error;
-            res.end(JSON.stringify(results));
-        });
-  };
-
   exports.findOneExercise = (req, res) => {
     connection.query('select * from exercise where id_exercises=?',
         [req.params.id],
@@ -91,7 +84,7 @@ exports.findOneSession = (req, res) => {
 // Create a record into de database
 exports.createExercise = (req, res) => {
   // Validate request
-    if (!req.body.exercise) {
+    if (!req.body.exercise_name) {
       return res.status(400).send({
           message: "Name can not be empty"
       });
@@ -129,30 +122,10 @@ exports.createTypeSession = (req, res) => {
         });
   };
 
-  exports.createSession = (req, res) => {
-    // Validate request
-    if (!req.body.mesociclo) {
-        return res.status(400).send({
-            message: "Mesociclo can not be empty"
-        });
-    }
-  
-    var params = req.body;
-    
-  
-    connection.query("INSERT INTO sessions SET ? ", params,
-        function (error, results, fields) {
-            if (error) throw error;
-            return res.send({
-                data: results,
-                message: 'New session has been created successfully.'
-            });
-        });
-  };
 
   exports.createSet = (req, res) => {
     // Validate request
-    if (!req.body.serie) {
+    if (!req.body.id_exercise) {
         return res.status(400).send({
             message: "Serie can not be empty"
         });
@@ -188,13 +161,7 @@ exports.deleteExercise = (req, res) => {
   });
 };
 
-exports.deleteSession = (req, res) => {
-    connection.query('DELETE FROM `sessions` WHERE `id_session`=?', 
-        [req.params.id], function (error, results, fields) {
-            if (error) throw error;
-            res.end('Record has been deleted!');
-    });
-  };
+
   exports.deleteSet = (req, res) => {
     connection.query('DELETE FROM `series` WHERE `id_serie`=?', 
         [req.params.id], function (error, results, fields) {
@@ -246,21 +213,7 @@ exports.updateExercise = (req, res) => {
         });
   };
 
-  exports.updateSession = (req, res) => {
-    // Validate Request
-    if (!req.body.mesociclo) {
-        return res.status(400).send({
-            message: "Mesociclo can not be empty"
-        });
-    }
-  
-    connection.query('UPDATE `sessions` SET `nro_session`=?,`type_workout`=?,`id_serie`=?,`mesociclo`=? ,`date_session`=?,where `id_session`=?',
-        [req.body.nroSession, req.body.typeWOUT, req.body.iserie, req.body.mesociclo ,req.body.date  ,req.params.id],
-        function (error, results, fields) {
-            if (error) throw error;
-            res.end(JSON.stringify(results));
-        });
-  };
+
   exports.updateSet = (req, res) => {
     // Validate Request
     if (!req.body.serie) {
