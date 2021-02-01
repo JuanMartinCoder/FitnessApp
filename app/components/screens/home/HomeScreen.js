@@ -24,7 +24,7 @@ export default function HomeScreen() {
                         console.log(date.format('YYYY-MM-DD').toString());
                 } }   //date = YYYY-MM-DD         
                     
-                    
+                
                     
                 />
                 <ScrollView

@@ -1,8 +1,18 @@
 
 /*
+-------------
+    SELECT s.id_serie, e.exercise_name, s.reps,s.weight, s.rpe, s.nro_serie, s.date_serie FROM series s INNER JOIN exercises e ON s.id_exercise = e.id_exercises AND date_serie = '2021-01-31';
 
+    SELECT s.id_serie,s.date_serie , e.exercise_name, GROUP_CONCAT(CONCAT('{"nro_serie": ',s.nro_serie,' , "reps":',s.reps,' , "weight": ',s.weight,' , "rpe": ',s.rpe,'}')) serie FROM series s INNER JOIN exercises e ON s.id_exercise = e.id_exercises AND date_serie = '2021-01-31';
 
+    result:
++----------+---------------+------+--------+-----+-----------+------------+
+| id_serie | exercise_name | reps | weight | rpe | nro_serie | date_serie |
++----------+---------------+------+--------+-----+-----------+------------+
+|        3 | Bench Press   |    8 |     55 |   9 |         1 | 2021-01-31 |
++----------+---------------+------+--------+-----+-----------+------------+
 
+------------
 
 */
 
@@ -43,6 +53,30 @@ exports.findAllSets = (req, res) => {
           res.end(JSON.stringify(results));
       });
 };
+
+
+
+exports.findAllSetsByDate = (req, res) => {
+    connection.query("SELECT s.id_serie,s.date_serie , e.exercise_name, CONCAT('[',GROUP_CONCAT(JSON_OBJECT('nro_serie',s.nro_serie,'reps',s.reps, 'weight',s.weight,'rpe',s.rpe)),']') AS series FROM series s INNER JOIN exercises e ON s.id_exercise = e.id_exercises AND date_serie = ?",[req.params.date],
+        function (error, results, fields) {
+            if (error) throw error;
+
+                 
+            news = JSON.stringify(results);
+
+            original = JSON.parse(news, function (key,value){
+                    if(key == 'series') return JSON.parse(value);
+                    return value;
+            });
+            
+            
+
+            res.json(original);
+            //res.end(result);
+
+            
+        });
+  };
 
 exports.findAllTypeSessions = (req, res) => {
   connection.query('select * from type_workout',

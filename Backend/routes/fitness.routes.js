@@ -17,6 +17,7 @@ module.exports = (app) => {
 
   // Retrieve a single todo by id
   app.get('/exercise/:id', fitnessApp.findOneExercise);
+  app.get('/setsbydate/:date', fitnessApp.findAllSetsByDate);
   app.get('/sets/:id', fitnessApp.findOneSet);
   app.get('/typesessions/:id', fitnessApp.findOneTypeSession);
 
