@@ -8,18 +8,28 @@
     SELECT s.id_serie,s.date_serie , e.exercise_name, CONCAT('[',GROUP_CONCAT(JSON_OBJECT('nro_serie',s.nro_serie,'reps',s.reps, 'weight',s.weight,'rpe',s.rpe)),']') AS series FROM series s INNER JOIN exercises e ON s.id_exercise = e.id_exercises AND date_serie = '2021-01-31'
 
 
-    SELECT w.name, s.id_serie, e.exercise_name, CONCAT('[',GROUP_CONCAT(JSON_OBJECT('nro_serie',s.nro_serie,'reps',s.reps, 'weight',s.weight,'rpe',s.rpe)),']') AS series 
+    SELECT t.name as Type_Routine,GROUP_CONCAT(JSON_OBJECT('exercise',r.exercise_name,'series', r.series)) as Exercises FROM type_workout t INNER JOIN  (SELECT w.id_type_workout, s.id_serie, e.exercise_name, CONCAT('[',GROUP_CONCAT(JSON_OBJECT('nro_serie',s.nro_serie,'reps',s.reps, 'weight',s.weight,'rpe',s.rpe)),']') AS series 
+    FROM series s INNER JOIN exercises e ON s.id_exercise = e.id_exercises AND date_serie = '2021-01-31' 
+    INNER JOIN type_workout w ON s.type_workout = w.id_type_workout GROUP BY e.exercise_name) r ON t.id_type_workout = r.id_type_workout;
+
+
+    
+    SELECT  s.id_serie, e.exercise_name, CONCAT('[',GROUP_CONCAT(JSON_OBJECT('nro_serie',s.nro_serie,'reps',s.reps, 'weight',s.weight,'rpe',s.rpe)),']') AS series 
     FROM series s INNER JOIN exercises e ON s.id_exercise = e.id_exercises AND date_serie = '2021-01-31' 
     INNER JOIN type_workout w ON s.type_workout = w.id_type_workout GROUP BY e.exercise_name;
 
+    SELECT t.name, GROUP_CONCAT(CONCAT(r.exercise_name,r.series)) AS exercises FROM type_workout t INNER JOIN  (SELECT w.id_type_workout, s.id_serie, e.exercise_name, CONCAT('[',GROUP_CONCAT(JSON_OBJECT('nro_serie',s.nro_serie,'reps',s.reps, 'weight',s.weight,'rpe',s.rpe)),']') AS series
+    FROM series s INNER JOIN exercises e ON s.id_exercise = e.id_exercises AND date_serie = '2021-01-31'
+    INNER JOIN type_workout w ON s.type_workout = w.id_type_workout GROUP BY e.exercise_name) r ON t.id_type_workout = r.id_type_workout;
 
 
-    result:
-+----------+---------------+------+--------+-----+-----------+------------+
-| id_serie | exercise_name | reps | weight | rpe | nro_serie | date_serie |
-+----------+---------------+------+--------+-----+-----------+------------+
-|        3 | Bench Press   |    8 |     55 |   9 |         1 | 2021-01-31 |
-+----------+---------------+------+--------+-----+-----------+------------+
+    SELECT t.name as Type_Routine, CONCAT('[',GROUP_CONCAT(JSON_OBJECT('ex',r.exercise_name,'serie',r.series)),']') as Exercises FROM type_workout t 
+    INNER JOIN (SELECT w.id_type_workout, s.id_serie, e.exercise_name, GROUP_CONCAT(JSON_OBJECT('nro_serie',s.nro_serie,'reps',s.reps, 'weight',s.weight,'rpe',s.rpe)) AS series 
+    FROM series s INNER JOIN exercises e ON s.id_exercise = e.id_exercises AND date_serie = '2021-01-31'
+    INNER JOIN type_workout w ON s.type_workout = w.id_type_workout GROUP BY e.exercise_name) r ON t.id_type_workout = r.id_type_workout;
+
+
+
 
 ------------
 
@@ -68,7 +78,7 @@ exports.findAllSets = (req, res) => {
 
 
 exports.findAllSetsByDate = (req, res) => {
-    connection.query("    SELECT w.name, s.id_serie, e.exercise_name, CONCAT('[',GROUP_CONCAT(JSON_OBJECT('nro_serie',s.nro_serie,'reps',s.reps, 'weight',s.weight,'rpe',s.rpe)),']') AS series FROM series s INNER JOIN exercises e ON s.id_exercise = e.id_exercises AND date_serie = ? INNER JOIN type_workout w ON s.type_workout = w.id_type_workout GROUP BY e.exercise_name;",[req.params.date],
+    connection.query("SELECT t.name as type_routine, CONCAT('[',GROUP_CONCAT(JSON_OBJECT('exercise',r.exercise_name,'series',r.series)),']') AS exercises FROM type_workout t INNER JOIN  (SELECT w.id_type_workout, s.id_serie, e.exercise_name, CONCAT('[',GROUP_CONCAT(JSON_OBJECT('nro_serie',s.nro_serie,'reps',s.reps, 'weight',s.weight,'rpe',s.rpe)),']') AS series FROM series s INNER JOIN exercises e ON s.id_exercise = e.id_exercises AND date_serie =? INNER JOIN type_workout w ON s.type_workout = w.id_type_workout GROUP BY e.exercise_name) r ON t.id_type_workout = r.id_type_workout",[req.params.date],
         function (error, results, fields) {
             if (error) throw error;
 
@@ -76,20 +86,19 @@ exports.findAllSetsByDate = (req, res) => {
                  
             news = JSON.stringify(results);
 
-            
+           //PARSING EXERCISES
             original = JSON.parse(news, function (key,value){
-                if(key == 'series') {
+                if(key == 'exercises') {
                     return JSON.parse(value);    
                 }
+                
                     return value;
             });
-
+            //PARSING SERIES
+           original[0].exercises.map((e) => {
+                e.series = JSON.parse(e.series);
+            })
             
-            
-        
-            
-
-            console.log(original);
            
             
             
