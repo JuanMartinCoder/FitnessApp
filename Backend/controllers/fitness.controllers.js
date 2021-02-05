@@ -86,6 +86,8 @@ exports.findAllSetsByDate = (req, res) => {
                  
             news = JSON.stringify(results);
 
+            
+
            //PARSING EXERCISES
             original = JSON.parse(news, function (key,value){
                 if(key == 'exercises') {
@@ -95,9 +97,15 @@ exports.findAllSetsByDate = (req, res) => {
                     return value;
             });
             //PARSING SERIES
-           original[0].exercises.map((e) => {
-                e.series = JSON.parse(e.series);
-            })
+            if(original[0].exercises == null){
+                res.json({"errorMessage":"Doesn't exist any training on that date"});
+                return
+            }else{
+                original[0].exercises.map((e) => {
+                    e.series = JSON.parse(e.series);
+                })
+            }
+           
             
            
             
