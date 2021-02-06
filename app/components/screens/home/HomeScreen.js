@@ -22,13 +22,16 @@ export default function HomeScreen() {
               .then((response) => response.json())
               .then((json) => setData(json))
               .catch((error) => console.error(error))
-              .finally(() => {setLoading(false); });
+              .finally(() => {setLoading(false);});
           }, []);
+
+
+          
     
          
         
         return (
-            <>
+            
                <View style={styles.body}>
                 <CalendarStrip
                     scrollable
@@ -49,12 +52,18 @@ export default function HomeScreen() {
                 
                     
                 />
+                
+                 
+                  
+                  
                 <Exercises props={data}/>
+                  
+                
 
                 </View>
                 
 
-            </>
+            
             
         )
     
