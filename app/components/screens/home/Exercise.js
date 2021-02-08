@@ -28,7 +28,11 @@ const styles = StyleSheet.create({
         height:100,
         marginTop:20,
         marginLeft: 24,
-        borderRadius: 6
+        marginBottom:2,
+        borderRadius: 6,
+        shadowColor: 'black',
+        shadowOpacity: 0.5,
+        elevation: 2,
       },
       body: {
         flex: 1,

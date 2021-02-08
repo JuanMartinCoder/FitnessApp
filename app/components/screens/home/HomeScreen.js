@@ -1,5 +1,5 @@
 import React , { useEffect, useState } from 'react'
-import { Text, View,StyleSheet,ScrollView } from 'react-native'
+import { Text, View,StyleSheet,ScrollView ,TouchableOpacity} from 'react-native'
 // import Calendar from './Calendar'
 import CalendarStrip from 'react-native-calendar-strip';
 import Exercises from './Exercises';
@@ -13,7 +13,7 @@ export default function HomeScreen() {
         const [isLoading, setLoading] = useState(true);
         const [data, setData] = useState([]);
         
-        
+        var existData = false;
 
         useEffect(() => {
             var url = 'http://192.168.0.110:4000/setsbydate/2021-01-31'; // + Changedtoday
@@ -27,6 +27,11 @@ export default function HomeScreen() {
 
 
           
+        if (data.errorMessage) {
+          existData = false 
+        } else {
+          existData = true;
+        }
     
          
         
@@ -37,7 +42,11 @@ export default function HomeScreen() {
                     scrollable
                     startingDate={today}
                     selectedDate={today}
-                    style={{height:150, paddingTop: 20, paddingBottom: 0}}
+                    style={{height:150, paddingTop: 20, paddingBottom: 0,
+                      shadowColor: 'black',
+                      shadowOpacity: 0.5,
+                      elevation: 2,
+                    }}
                     calendarColor={'#D2F5F0'}
                     calendarHeaderStyle={{color: '#707070'}}
                     dateNumberStyle={{color: '#707070'}}
@@ -54,11 +63,15 @@ export default function HomeScreen() {
                 />
                 
                  
+                  {
+                    existData ? <Exercises props={data}/> : <Text style={styles.errorMessage}>No existe una rutina este dia. Aprete en el + para agregar una rutina.</Text>
+                  }
                   
-                  
-                <Exercises props={data}/>
-                  
-                
+                  <View style={styles.buttonContainer}>
+                  <TouchableOpacity style={styles.button}>
+                      <Text style={styles.buttonText}>+</Text>
+                  </TouchableOpacity>
+                  </View>
 
                 </View>
                 
@@ -76,5 +89,47 @@ const styles = StyleSheet.create({
       },
       body: {
         flex: 1,
+        backgroundColor: '#F5F5F5',
+      },
+      errorMessage: {
+        textAlign:'center',
+        textAlignVertical: 'center',
+        flex:1,
+        color: '#A1A1A1',
+        padding: 30
+      },
+      button:{
+        backgroundColor: "#6FE6D6",
+        borderRadius: 40,
+        width:70,
+        height:70,
+        shadowColor: 'black',
+        shadowOpacity: 0.5,
+        elevation: 2,
+      },
+      buttonText:{
+        textAlign:'center',
+        textAlignVertical:'center',        
+        flex:1,
+        fontSize:30,
+        color:'#fff',
+      },
+      buttonContainer: {
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+        paddingBottom: 25,
+        paddingRight:25,
+        paddingTop:25,
+        backgroundColor:'#F5F5F5',
+        shadowColor: "#000",
+            shadowOffset: {
+              width: 10,
+              height: 10,
+            },
+            shadowOpacity: 0.12,
+            shadowRadius: 60,
+        
+        
       }
+      
 });
