@@ -42,7 +42,7 @@ const mysql = require('mysql');
 const d3 = require('d3-collection');
 
 
-const config = ini.parse(fs.readFileSync('config.ini', 'utf-8'));
+const config = ini.parse(fs.readFileSync('configExample.ini', 'utf-8'));
 
 const databaseConfig = JSON.parse(JSON.stringify(config.database));
 
