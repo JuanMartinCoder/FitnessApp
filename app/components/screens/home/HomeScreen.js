@@ -3,6 +3,7 @@ import { Text, View,StyleSheet,ScrollView ,TouchableOpacity,Modal, LogBox} from 
 // import Calendar from './Calendar'
 import CalendarStrip from 'react-native-calendar-strip';
 import Exercises from './Exercises';
+import AddExercise from "./AddExercise";
 
 
 var today = new Date();
@@ -88,13 +89,20 @@ export default function HomeScreen() {
 
                       <View style={styles.centeredView}>
                           <View style={styles.modalView}>
+                          <View style={styles.buttonModalBox}>
+                            <TouchableOpacity style={styles.buttonModalCancel} onPress={()=>setVisible(!isvisible)}>
+                              <Text style={styles.buttonTextModal}>x</Text>
+                            </TouchableOpacity>
+                            <Text style={styles.titleRoutine}>Add Exercise</Text>
+                            <TouchableOpacity style={styles.buttonModalOkey} onPress={()=>setVisible(!isvisible)}>
+                              <Text style={styles.buttonTextModal}>x</Text>
+                            </TouchableOpacity>
+                          </View>
+                            
+                            <AddExercise />
 
 
-
-
-                            <TouchableOpacity style={styles.buttonModal, styles.button} onPress={()=>setVisible(!isvisible)}>
-
-                            </TouchableOpacity>  
+                              
                           </View>
                        </View>
 
@@ -129,6 +137,14 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F5F5F5',
       },
+      titleRoutine:{
+        flex: 1,
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#00000080',
+        textAlign:'center',
+        
+    },
       errorMessage: {
         textAlign:'center',
         textAlignVertical: 'center',
@@ -136,8 +152,34 @@ const styles = StyleSheet.create({
         color: '#A1A1A1',
         padding: 30
       },
-      buttonModal:{
-          alignSelf:'center'
+      buttonModalOkey:{
+        backgroundColor: "#6FE6D6",
+        borderRadius: 20,
+        width:40,
+        height:40,
+        shadowColor: 'black',
+        shadowOpacity: 0.5,
+        elevation: 2,
+      },
+      buttonModalCancel:{
+        backgroundColor: "#E86363",
+        borderRadius: 20,
+        width:40,
+        height:40,
+        shadowColor: 'black',
+        shadowOpacity: 0.5,
+        elevation: 2,
+      },
+      buttonTextModal:{
+        textAlign:'center',
+        textAlignVertical:'center',        
+        flex:1,
+        fontSize:22,
+        color:'#fff',
+      },
+      buttonModalBox:{
+        flexDirection:'row',
+        justifyContent:'space-between'
       },
       centeredView: {
         flex: 1,
@@ -146,10 +188,9 @@ const styles = StyleSheet.create({
         backgroundColor:'#00000020'
       },    
       modalView: {
+        flex:1,
         margin: 20,
         backgroundColor: "white",
-        height:100,
-        width:100,
         borderRadius: 20,
         padding: 35,
         alignItems: "center",
