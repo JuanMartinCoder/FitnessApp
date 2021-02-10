@@ -11,6 +11,11 @@ and see over the time your progress and stats.
 * Be able to program your training from the begining with exercises
 * Ba able to see all your stats and progress (body weight, excercises progress, etc.)
 
+
+## Must Do
+
+* Replace your database config into 'ConfigExample.ini'
+
  
 
 
